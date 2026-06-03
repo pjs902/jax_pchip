@@ -1,10 +1,14 @@
 # jax_pchip
 
-JAX-compatible PCHIP (Piecewise Cubic Hermite Interpolating Polynomial) monotone cubic interpolation.
+[![Tests](https://github.com/pjs902/jax_pchip/actions/workflows/tests.yml/badge.svg)](https://github.com/pjs902/jax_pchip/actions/workflows/tests.yml)
+[![Documentation Status](https://readthedocs.org/projects/jax-pchip/badge/?version=latest)](https://jax-pchip.readthedocs.io/en/latest/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A drop-in analogue of `scipy.interpolate.PchipInterpolator` that works inside `jax.jit`, `jax.grad`, and `jax.vmap`.  This is the same role that [`jax_cosmo`](https://github.com/DifferentiableUniverseInitiative/jax_cosmo) plays for B-splines — a scipy interpolator re-expressed so that knot *heights* are fully JAX-traceable.
+**`scipy.interpolate.PchipInterpolator`, translated to JAX.**
 
-Results match scipy to floating-point precision (rtol ≈ 1e-6) including the Fritsch-Carlson interior slopes and the 3-point quadratic endpoint formula.
+This package is not a new algorithm.  It is the same Fritsch-Carlson (1980) PCHIP used by scipy, re-expressed so that knot *heights* are JAX arrays that can be differentiated and JIT-compiled — in the same way that [`jax_cosmo`](https://github.com/DifferentiableUniverseInitiative/jax_cosmo) re-expresses scipy's B-splines for JAX.
+
+Results match `scipy.interpolate.PchipInterpolator` to floating-point precision (rtol ≈ 1e-6), including the Fritsch-Carlson interior slopes and the 3-point quadratic endpoint formula.
 
 ---
 
