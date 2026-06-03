@@ -18,4 +18,5 @@ intersphinx_mapping = {
 }
 
 html_theme = "furo"
+html_static_path = ["_static"]
 autodoc_member_order = "bysource"
