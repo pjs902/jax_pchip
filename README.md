@@ -2,11 +2,11 @@
 
 [![Tests](https://github.com/pjs902/jax_pchip/actions/workflows/tests.yml/badge.svg)](https://github.com/pjs902/jax_pchip/actions/workflows/tests.yml)
 [![Documentation Status](https://readthedocs.org/projects/jax-pchip/badge/?version=latest)](https://jax-pchip.readthedocs.io/en/latest/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 **`scipy.interpolate.PchipInterpolator`, translated to JAX.**
 
-This package is not a new algorithm.  It is the same Fritsch-Carlson (1980) PCHIP used by scipy, re-expressed so that knot *heights* are JAX arrays that can be differentiated and JIT-compiled — in the same way that [`jax_cosmo`](https://github.com/DifferentiableUniverseInitiative/jax_cosmo) re-expresses scipy's B-splines for JAX.
+This is just a translation of the scipy implementation to JAX in the same style as the [`jax_cosmo`](https://github.com/DifferentiableUniverseInitiative/jax_cosmo) implementation of B-Splines.  It is the same Fritsch-Carlson (1980) PCHIP used by scipy, re-expressed so that knot *heights* are JAX arrays that can be differentiated and JIT-compiled.
 
 Results match `scipy.interpolate.PchipInterpolator` to floating-point precision (rtol ≈ 1e-6), including the Fritsch-Carlson interior slopes and the 3-point quadratic endpoint formula.
 
@@ -16,7 +16,7 @@ Results match `scipy.interpolate.PchipInterpolator` to floating-point precision 
 
 The standard scipy `PchipInterpolator` cannot be used inside a JAX-traced function because it relies on numpy control flow.  If you want to sample PCHIP knot heights with NUTS (or any other JAX-based gradient method), you need a version where the heights are dynamic JAX arrays.
 
-The key insight is that knot *positions* `x` are usually fixed throughout a computation (e.g. a set of radial bins that never change), while knot *heights* `y` are the parameters being optimised or sampled.  By freezing `x` at construction time and tracing only `y`, the interpolator compiles once and then runs at XLA speed for any `y`.
+The key concept is that knot *positions* `x` are usually fixed throughout a computation (e.g. a set of radial bins that never change), while knot *heights* `y` are the parameters being optimised or sampled.  By freezing `x` at construction time and tracing only `y`, the interpolator compiles once and then runs at XLA speed for any `y`.
 
 ```
          static (compile-time)       dynamic (JAX-traced)
